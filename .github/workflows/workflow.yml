@@ -16,3 +16,4 @@ jobs:
           aws_bucket: ${{ secrets.AWS_BUCKET }}
           source_dir: 'airflow'
           destination_dir: 'project'
+	  endpoint: 's3://zynairflowbkt/'
