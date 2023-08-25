@@ -36,6 +36,7 @@ with DAG(
     job1 = EmrServerlessStartJobOperator(
         task_id="start_job_1",
         application_id=application_id,
+
         execution_role_arn=JOB_ROLE_ARN,
         job_driver={
             "sparkSubmit": {
