@@ -15,4 +15,4 @@ if __name__ == '__main__':
     #       "SparkByExamples.com").getOrCreate()
 
     df = spark.read.options(header='True', inferSchema='True').csv("s3://glue-zayn/bootcamp/orders/orders.csv")
-    df.write.parquet("s3://zayn-emr/capstone/airflow_out/order_par/")
+    df.write.parquet("s3://zayn-emr/capstone/airflow_out/order_par1/")
