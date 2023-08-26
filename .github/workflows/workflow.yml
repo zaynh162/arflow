@@ -17,3 +17,4 @@ jobs:
           source_dir: 'airflow'
           destination_dir: 'project'
           endpoint: 's3://zynairflowbkt/'
+          aws-region: 'ap-south-1'
