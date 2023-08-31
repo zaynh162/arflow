@@ -65,4 +65,4 @@ with DAG(
         provide_context=True,
     )
 
-first_function_execute >> second_function_execute >> third_function_execute 
+first_function_execute >> second_function_execute >> third_function_execute

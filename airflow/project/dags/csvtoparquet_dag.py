@@ -30,7 +30,7 @@ DEFAULT_MONITORING_CONFIG = {
 
 
 with DAG(
-    dag_id="emr_redshift_dag",
+    dag_id="csvtoparquet_dag",
     schedule_interval=None,
     start_date=datetime(2023, 1, 1),
     tags=["example"],
@@ -45,40 +45,13 @@ with DAG(
 
     application_id = create_app.output
 
-    job1 = EmrServerlessStartJobOperator(
-         task_id="start_job_1",
-         application_id=application_id,
-         execution_role_arn=JOB_ROLE_ARN,
-         job_driver={
-             "sparkSubmit": {
-                 "entryPoint": "s3://zynairflowbkt/jobs/job1.py", # converting csv to parquet
-             }
-         },
-         configuration_overrides=DEFAULT_MONITORING_CONFIG,
-     )
-
-    job2 = EmrServerlessStartJobOperator(
-         task_id="start_job_2",
-         application_id=application_id,
-         execution_role_arn=JOB_ROLE_ARN,
-         job_driver={
-             "sparkSubmit": {
-                 "entryPoint": "s3://zynairflowbkt/jobs/job2.py", # convert that parquet to orc
-                 "entryPointArguments": ["1000"]
-             }
-         },
-         configuration_overrides=DEFAULT_MONITORING_CONFIG,
-     )
-
     job3 = EmrServerlessStartJobOperator(
-        task_id="write_to_redshift_job_3",
+        task_id="write_to_s3_job_3",
         application_id=application_id,
         execution_role_arn=JOB_ROLE_ARN,
         job_driver={
             "sparkSubmit": {
-                "entryPoint": "s3://zynairflowbkt/jobs/job3.py",
-                "entryPointArguments": ["1000"],
-                "sparkSubmitParameters": "--jars s3://zynairflowbkt/jobs/redshift-jdbc42-2.1.0.9.jar"
+                "entryPoint": "s3://zynairflowbkt/jobs/readwrites3.py"
             }
         },
         configuration_overrides=DEFAULT_MONITORING_CONFIG,
@@ -92,7 +65,5 @@ with DAG(
         trigger_rule="all_done",
     )
 
-    (create_app >> [job1, job2, job3] >> delete_app)
-
-
-    #(create_app >> [job3] >> delete_app)
+    #(create_app >> [job1, job2, job3] >> delete_app)
+    (create_app >> [job3] >> delete_app)
