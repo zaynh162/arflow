@@ -7,7 +7,6 @@ try:
     from airflow.operators.bash_operator import BashOperator
     from airflow.operators.python_operator import PythonOperator
 
-
 except Exception as e:
     print("Error  {} ".format(e))
 
